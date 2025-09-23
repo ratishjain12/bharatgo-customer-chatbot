@@ -97,12 +97,18 @@
       btn.textContent = "×";
       btn.style.fontSize = isMobile ? "24px" : "26px";
       iframe.style.display = "block";
+      if (isMobile) {
+        // Match ChatWidget: hide FAB on mobile while open
+        btn.style.display = "none";
+      }
     } else {
       btn.style.borderRadius = "0";
       btn.style.background = "transparent";
       btn.textContent = "";
       img.style.display = "block";
       iframe.style.display = "none";
+      // Always show button when closed
+      btn.style.display = "flex";
     }
   }
 
@@ -131,6 +137,15 @@
       if (typeof mql.addEventListener === "function") mql.addEventListener("change", handler);
       else if (typeof mql.addListener === "function") mql.addListener(handler);
     }
+
+    // Listen for close requests from inside the iframe
+    window.addEventListener("message", function (ev) {
+      var data = ev && ev.data;
+      if (data && data.type === "BG_CHAT_CLOSE") {
+        isOpen = false;
+        setOpenState(false, refs, isMobile);
+      }
+    });
   }
 
   if (document.readyState === "loading") {
