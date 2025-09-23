@@ -483,7 +483,7 @@ export default function Chatbot({ embedded = false, onClose }: { embedded?: bool
             boxShadow:
               isLoading || !input.trim()
                 ? "none"
-                : "0 4px 12px rgba(59, 130, 246, 0.4)",
+                : "0 4px 12px rgba(27, 39, 57, 0.4)",
           }}
           onMouseEnter={(e) => {
             if (!isLoading && input.trim()) {
