@@ -60,7 +60,7 @@
     iframe.style.bottom = "100px";
     iframe.style.width = "400px";
     iframe.style.height = "600px";
-    iframe.style.background = "#ffffff";
+    iframe.style.background = "transparent";
     iframe.style.borderRadius = "16px";
     iframe.style.boxShadow = "0 32px 64px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05)";
     iframe.style.overflow = "hidden";
