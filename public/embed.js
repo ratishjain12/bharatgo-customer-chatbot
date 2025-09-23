@@ -109,6 +109,11 @@
       iframe.style.display = "none";
       // Always show button when closed
       btn.style.display = "flex";
+      btn.style.visibility = "visible";
+      btn.style.opacity = "1";
+      btn.style.pointerEvents = "auto";
+      btn.style.transform = "scale(1)";
+      btn.style.zIndex = String(Z);
     }
   }
 
