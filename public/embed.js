@@ -39,9 +39,16 @@
     img.style.objectFit = "cover";
     img.style.pointerEvents = "none";
     img.style.userSelect = "none";
+    var closeEl = document.createElement("span");
+    closeEl.textContent = "×";
+    closeEl.style.display = "none";
+    closeEl.style.fontSize = "26px";
+    closeEl.style.lineHeight = "1";
+    closeEl.style.color = "#ffffff";
     btn.appendChild(img);
+    btn.appendChild(closeEl);
 
-    return { btn: btn, img: img };
+    return { btn: btn, img: img, closeEl: closeEl };
   }
 
   function createIframe() {
@@ -89,22 +96,22 @@
     var btn = refs.btn;
     var img = refs.img;
     var iframe = refs.iframe;
+    var closeEl = refs.closeEl;
     if (open) {
       btn.style.borderRadius = "50%";
       btn.style.background = "linear-gradient(135deg, #3B82F6 0%, #A64BF6 100%)";
       btn.style.color = "#ffffff";
       img.style.display = "none";
-      btn.textContent = "×";
-      btn.style.fontSize = isMobile ? "24px" : "26px";
+      closeEl.style.display = "block";
+      closeEl.style.fontSize = isMobile ? "24px" : "26px";
       iframe.style.display = "block";
       if (isMobile) {
-        // Match ChatWidget: hide FAB on mobile while open
         btn.style.display = "none";
       }
     } else {
       btn.style.borderRadius = "0";
       btn.style.background = "transparent";
-      btn.textContent = "";
+      closeEl.style.display = "none";
       img.style.display = "block";
       iframe.style.display = "none";
       // Always show button when closed
@@ -124,7 +131,7 @@
     applyMobileLayout(isMobile, iframe);
 
     var parts = createButton();
-    var refs = { btn: parts.btn, img: parts.img, iframe: iframe };
+    var refs = { btn: parts.btn, img: parts.img, closeEl: parts.closeEl, iframe: iframe };
 
     var isOpen = false;
     parts.btn.addEventListener("click", function () {
