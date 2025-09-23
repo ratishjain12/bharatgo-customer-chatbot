@@ -140,7 +140,7 @@ export default function Chatbot({ embedded = false, onClose }: { embedded?: bool
       style={{
         height: embedded ? "100%" : isSmallViewport ? "100vh" : 540,
         width: embedded ? "100%" : "100%",
-        maxWidth: embedded ? undefined : isSmallViewport ? "100%" : 720,
+        maxWidth: embedded ? "100%" : isSmallViewport ? "100%" : 720,
         margin: embedded ? 0 : isSmallViewport ? 0 : "24px auto",
         border: "none",
         borderRadius: embedded ? 0 : isSmallViewport ? 0 : 12,
