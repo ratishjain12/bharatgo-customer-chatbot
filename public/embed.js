@@ -43,8 +43,15 @@
     closeEl.textContent = "×";
     closeEl.style.display = "none";
     closeEl.style.fontSize = "26px";
-    closeEl.style.lineHeight = "1";
     closeEl.style.color = "#ffffff";
+    // Center the glyph perfectly regardless of font metrics
+    closeEl.style.width = "100%";
+    closeEl.style.height = "100%";
+    closeEl.style.display = "none"; // toggled on open
+    closeEl.style.alignItems = "center";
+    closeEl.style.justifyContent = "center";
+    closeEl.style.pointerEvents = "none";
+    closeEl.style.display = "none";
     btn.appendChild(img);
     btn.appendChild(closeEl);
 
@@ -102,7 +109,7 @@
       btn.style.background = "linear-gradient(135deg, #3B82F6 0%, #A64BF6 100%)";
       btn.style.color = "#ffffff";
       img.style.display = "none";
-      closeEl.style.display = "block";
+      closeEl.style.display = "flex";
       closeEl.style.fontSize = isMobile ? "24px" : "26px";
       iframe.style.display = "block";
       if (isMobile) {
