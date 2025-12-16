@@ -20,8 +20,11 @@ export async function sendChatQuestion(
 ): Promise<ChatSuccessResponse> {
   const url = import.meta.env.VITE_CHAT_API_URL;
 
-  const hostname = "dummy-store.bharatgo.com";
-  
+  const hostname =
+    typeof window !== "undefined"
+      ? window.location.hostname
+      : "dummy-store.bharatgo.com";
+
   const seller_id = await getSellerId(hostname);
 
   let user_info: ChatRequestBody["user_info"] | null = null;
