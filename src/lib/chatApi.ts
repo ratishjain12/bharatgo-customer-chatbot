@@ -8,6 +8,7 @@ import {
   getStoredObj,
   setStoredChatHistory,
   setStoredSellerId,
+  checkAndClearIfSellerChanged,
 } from "../helpers/session";
 import type {
   ChatRawResponse,
@@ -26,6 +27,11 @@ export async function sendChatQuestion(
       : "dummy-store.bharatgo.com";
 
   const seller_id = await getSellerId(hostname);
+
+  // Check if seller changed and clear session if needed
+  if (seller_id) {
+    checkAndClearIfSellerChanged(String(seller_id));
+  }
 
   let user_info: ChatRequestBody["user_info"] | null = null;
   try {

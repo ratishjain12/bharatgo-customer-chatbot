@@ -1,6 +1,7 @@
 export const SESSION_KEY = "bharatgo-customer-session-id";
 export const TTL_MS = 15 * 60 * 1000; // 15 minutes
 const PENDING_HISTORY_KEY = "bharatgo-customer-history:pending";
+const SELLER_ID_KEY = "bharatgo-customer-seller-id";
 
 export type StoredSession = {
   id: string;
@@ -23,6 +24,41 @@ function now() {
   return Date.now();
 }
 
+export function checkAndClearIfSellerChanged(currentSellerId: string | null): boolean {
+  try {
+    const storedSellerId = localStorage.getItem(SELLER_ID_KEY);
+
+    // If no current seller but there's stored data, clear it
+    if (!currentSellerId && storedSellerId) {
+      clearStoredSession();
+      clearPendingHistory();
+      localStorage.removeItem(SELLER_ID_KEY);
+      return true;
+    }
+
+    // If seller changed, clear all session data
+    if (
+      currentSellerId &&
+      storedSellerId &&
+      currentSellerId !== storedSellerId
+    ) {
+      clearStoredSession();
+      clearPendingHistory();
+      localStorage.setItem(SELLER_ID_KEY, currentSellerId);
+      return true;
+    }
+
+    // If new seller, store the seller ID
+    if (currentSellerId && !storedSellerId) {
+      localStorage.setItem(SELLER_ID_KEY, currentSellerId);
+    }
+
+    return false;
+  } catch {
+    return false;
+  }
+}
+
 export function getStoredObj(): StoredSession | undefined {
   try {
     const raw = localStorage.getItem(SESSION_KEY);
@@ -33,6 +69,18 @@ export function getStoredObj(): StoredSession | undefined {
       localStorage.removeItem(SESSION_KEY);
       return undefined;
     }
+
+    // Verify seller ID matches if both exist
+    const storedSellerId = localStorage.getItem(SELLER_ID_KEY);
+    if (
+      storedSellerId &&
+      parsed.sellerId &&
+      parsed.sellerId !== storedSellerId
+    ) {
+      clearStoredSession();
+      return undefined;
+    }
+
     return parsed;
   } catch {
     return undefined;
@@ -94,8 +142,17 @@ export function setStoredSellerId(sellerId: string) {
   try {
     const prev = getStoredObj();
     if (!prev?.id) return; // Only attach sellerId when a session exists
+    
+    // Check if seller changed and clear if needed
+    const sellerChanged = checkAndClearIfSellerChanged(sellerId);
+    if (sellerChanged) {
+      // Session was cleared, don't update
+      return;
+    }
+    
     const next: StoredSession = { ...prev, sellerId };
     localStorage.setItem(SESSION_KEY, JSON.stringify(next));
+    localStorage.setItem(SELLER_ID_KEY, sellerId);
   } catch {
     // ignore
   }

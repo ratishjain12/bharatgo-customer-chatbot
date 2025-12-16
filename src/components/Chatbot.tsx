@@ -7,7 +7,9 @@ import {
   setStoredUserInfo,
   getStoredChatHistory,
   addStoredChatMessage,
+  checkAndClearIfSellerChanged,
 } from "../helpers/session";
+import { getSellerId } from "../helpers";
 import type { Message } from "../types";
 
 export default function Chatbot({
@@ -166,6 +168,23 @@ export default function Chatbot({
     return () => {
       if (timerId) window.clearTimeout(timerId);
     };
+  }, []);
+
+  // Check if seller changed on mount and clear history if needed
+  useEffect(() => {
+    const checkSeller = async () => {
+      if (typeof window === "undefined") return;
+      const hostname = window.location.hostname;
+      const sellerId = await getSellerId(hostname);
+      if (sellerId) {
+        const sellerChanged = checkAndClearIfSellerChanged(String(sellerId));
+        if (sellerChanged) {
+          // Clear messages if seller changed
+          setMessages([]);
+        }
+      }
+    };
+    checkSeller();
   }, []);
 
   const isSmallViewport =
