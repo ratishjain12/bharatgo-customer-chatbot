@@ -1,6 +1,6 @@
-export const SESSION_KEY = "chat-session-id";
+export const SESSION_KEY = "bharatgo-customer-session-id";
 export const TTL_MS = 15 * 60 * 1000; // 15 minutes
-const PENDING_HISTORY_KEY = "chat:history:pending";
+const PENDING_HISTORY_KEY = "bharatgo-customer-history:pending";
 
 export type StoredSession = {
   id: string;
